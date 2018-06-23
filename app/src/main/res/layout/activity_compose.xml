@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="What's happening?" />
+        android:hint="What's happening?"
+        android:maxLength="280"/>
 
     <Button
         android:id="@+id/btCompose"
@@ -21,4 +22,15 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:onClick="composeTweet"/>
+
+    <TextView
+        android:id="@+id/tvCharCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@id/btCompose"
+        android:text="280" />
+    
 </RelativeLayout>
