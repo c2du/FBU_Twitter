@@ -147,13 +147,14 @@ public class TimelineActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // REQUEST_CODE is defined above
-
-        Tweet tweet = (Tweet) Parcels.unwrap(data.getParcelableExtra("tweet"));
-        //Log.d("SendTweet", "Activity result: " + tweet.body);
-        // Extract name value from result extras
-        tweets.add(0, tweet);
-        tweetAdapter.notifyItemInserted(0);
-        rvTweets.scrollToPosition(0);
+        if (resultCode == RESULT_OK) {
+            Tweet tweet = (Tweet) Parcels.unwrap(data.getParcelableExtra("tweet"));
+            //Log.d("SendTweet", "Activity result: " + tweet.body);
+            // Extract name value from result extras
+            tweets.add(0, tweet);
+            tweetAdapter.notifyItemInserted(0);
+            rvTweets.scrollToPosition(0);
+        }
     }
 
     private void composeMessage() {

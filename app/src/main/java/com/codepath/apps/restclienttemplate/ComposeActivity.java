@@ -62,6 +62,8 @@ public class ComposeActivity extends AppCompatActivity {
     }
 
     private void closeCompose() {
+        Intent data = new Intent();
+        setResult(RESULT_CANCELED, data); // set result code and bundle data for response
         finish(); // closes the activity
     }
 
