@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.codepath.oauth.OAuthBaseClient;
 import com.github.scribejava.apis.TwitterApi;
@@ -25,6 +26,7 @@ public class TwitterClient extends OAuthBaseClient {
 	public static final String REST_URL = "https://api.twitter.com/1.1"; // Change this, base API URL
 	public static final String REST_CONSUMER_KEY = "9DB2y6SeHP4sBor1ROpjiizdQ";       // Change this
 	public static final String REST_CONSUMER_SECRET = "cpi2Q0djGRbWgiOnEYZ0M8avzwKhTBosAgW6SWJRCyPzXke5bI"; // Change this
+	private final String TAG = "debugdebugdebug";
 
 	// Landing page to indicate the OAuth flow worked in case Chrome for Android 25+ blocks navigation back to the app.
 	public static final String FALLBACK_URL = "https://codepath.github.io/android-rest-client-template/success.html";
@@ -48,6 +50,7 @@ public class TwitterClient extends OAuthBaseClient {
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
 		params.put("since_id", 1); // pull to refresh
+		Log.d(TAG, "Getting home timeline");
 		client.get(apiUrl, params, handler);
 	}
 
