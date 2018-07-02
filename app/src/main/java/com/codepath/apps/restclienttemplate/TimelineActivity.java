@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -28,6 +29,7 @@ public class TimelineActivity extends AppCompatActivity {
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
+    ProgressBar pb;
     private SwipeRefreshLayout swipeContainer;
 
     // REQUEST_CODE can be any value we like, used to determine the result type later
@@ -43,6 +45,8 @@ public class TimelineActivity extends AppCompatActivity {
 
         // find the RecyclerView
         rvTweets = (RecyclerView) findViewById(R.id.rvTweet);
+        // find the progress bar
+        pb = (ProgressBar) findViewById(R.id.pbLoading);
         // init the arraylist (data source)
         tweets = new ArrayList<>();
         // construct the adapter from this datasource
@@ -73,6 +77,7 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     public void fetchTimelineAsync(int page) {
+        pb.setVisibility(ProgressBar.VISIBLE);
         // Send the network request to fetch the updated data
         // `client` here is an instance of Android Async HTTP
         // getHomeTimeline is an example endpoint.
@@ -100,18 +105,21 @@ public class TimelineActivity extends AppCompatActivity {
                 // Now we call setRefreshing(false) to signal refresh has finished
                 Log.d(TAG, "Finished adding all tweets");
                 swipeContainer.setRefreshing(false);
+                pb.setVisibility(ProgressBar.INVISIBLE);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.d(TAG, "Fetch timeline error: " + throwable.toString());
                 Log.d(TAG, responseString);
+                pb.setVisibility(ProgressBar.INVISIBLE);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 Log.d(TAG, "Fetch timeline error: " + throwable.toString());
                 Log.d(TAG, errorResponse.toString());
+                pb.setVisibility(ProgressBar.INVISIBLE);
             }
         });
     }
@@ -154,6 +162,7 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void populateTimeline() {
+        pb.setVisibility(ProgressBar.VISIBLE);
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -172,29 +181,34 @@ public class TimelineActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+                pb.setVisibility(ProgressBar.INVISIBLE);
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("TwitterClient", response.toString());
+                pb.setVisibility(ProgressBar.INVISIBLE);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.d("TwitterClient", responseString);
                 throwable.printStackTrace();
+                pb.setVisibility(ProgressBar.INVISIBLE);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 Log.d("TwitterClient", errorResponse.toString());
                 throwable.printStackTrace();
+                pb.setVisibility(ProgressBar.INVISIBLE);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("TwitterClient", errorResponse.toString());
                 throwable.printStackTrace();
+                pb.setVisibility(ProgressBar.INVISIBLE);
             }
         });
     }

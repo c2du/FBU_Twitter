@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -27,6 +28,7 @@ public class ComposeActivity extends AppCompatActivity {
     TextView tvCharCount;
     TwitterClient client;
     Tweet tweet;
+    ProgressBar pb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class ComposeActivity extends AppCompatActivity {
         client = TwitterApp.getRestClient(this);
         etCompose = (EditText) findViewById(R.id.etCompose);
         tvCharCount = (TextView) findViewById(R.id.tvCharCount);
+        pb = (ProgressBar) findViewById(R.id.pbLoading);
     }
 
     @Override
@@ -45,6 +48,7 @@ public class ComposeActivity extends AppCompatActivity {
     }
 
     public void composeTweet(View view) {
+        pb.setVisibility(ProgressBar.VISIBLE);
 
         client.sendTweet(etCompose.getText().toString(), new JsonHttpResponseHandler() {
             @Override
@@ -60,6 +64,7 @@ public class ComposeActivity extends AppCompatActivity {
                     //data.putExtra("code", 200); // ints work too
                     // Activity finished ok, return the data
                     setResult(RESULT_OK, data); // set result code and bundle data for response
+                    pb.setVisibility(ProgressBar.INVISIBLE);
                     finish(); // closes the activity, pass data to parent
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -69,16 +74,19 @@ public class ComposeActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("SendTweet", errorResponse.toString());
+                pb.setVisibility(ProgressBar.INVISIBLE);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 Log.d("SendTweet", errorResponse.toString());
+                pb.setVisibility(ProgressBar.INVISIBLE);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.d("SendTweet", responseString);
+                pb.setVisibility(ProgressBar.INVISIBLE);
             }
         });
     }
