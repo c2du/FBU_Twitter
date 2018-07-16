@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -26,11 +27,12 @@ import cz.msebera.android.httpclient.Header;
 
 public class ComposeActivity extends AppCompatActivity {
 
-    EditText etCompose;
-    TextView tvCharCount;
-    TwitterClient client;
-    Tweet tweet;
-    ProgressBar pb;
+    private EditText etCompose;
+    private TextView tvCharCount;
+    private TwitterClient client;
+    private Tweet tweet;
+    private ProgressBar pb;
+    private ImageView ivProfileImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,9 @@ public class ComposeActivity extends AppCompatActivity {
         etCompose = (EditText) findViewById(R.id.etCompose);
         tvCharCount = (TextView) findViewById(R.id.tvCharCount);
         pb = (ProgressBar) findViewById(R.id.pbLoading);
+        ivProfileImage = findViewById(R.id.ivProfileImage);
+
+
     }
 
     @Override
@@ -69,7 +74,7 @@ public class ComposeActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        String charsLeft = String.format(Locale.US, "%d", 280 - etCompose.getText().toString().length());
+        String charsLeft = String.format(Locale.US, "%d", 140 - etCompose.getText().toString().length());
         tvCharCount.setText(charsLeft);
         return true;
     }

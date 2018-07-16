@@ -19,7 +19,9 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="5dp"
         android:layout_toEndOf="@+id/ivProfileImage"
-        android:text="TextView" />
+        android:layout_toRightOf="@id/ivProfileImage"
+        android:text="TextView"
+        android:textColor="@color/whiteText"/>
 
     <TextView
         android:id="@+id/tvBody"
@@ -28,7 +30,9 @@
         android:layout_below="@+id/tvUserName"
         android:layout_marginLeft="5dp"
         android:layout_toEndOf="@id/ivProfileImage"
-        android:text="TextView" />
+        android:layout_toRightOf="@id/ivProfileImage"
+        android:text="TextView"
+        android:textColor="@color/whiteText"/>
 
     <TextView
         android:id="@+id/tvRelativeTimestamp"
@@ -37,6 +41,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="5dp"
         android:layout_toEndOf="@+id/tvUserName"
-        android:textColor="#C0C0C0"
+        android:textColor="@color/greyText"
         android:text="TextView" />
 </RelativeLayout>

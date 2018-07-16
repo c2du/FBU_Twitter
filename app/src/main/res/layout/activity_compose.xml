@@ -12,7 +12,11 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="What's happening?"
-        android:maxLength="280"/>
+        android:maxLength="140"
+        android:background="@android:color/transparent"
+        android:layout_toRightOf="@id/ivProfileImage"
+        android:textColorHint="@color/greyText"
+        android:textColor="@color/whiteText"/>
 
     <Button
         android:id="@+id/btCompose"
@@ -34,7 +38,8 @@
         android:layout_marginBottom="15dp"
         android:layout_marginRight="5dp"
         android:layout_toLeftOf="@id/btCompose"
-        android:text="280" />
+        android:text="140"
+        android:textColor="@color/whiteText"/>
 
     <ProgressBar
         android:id="@+id/pbLoading"
@@ -42,5 +47,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"/>
-    
+
+    <ImageView
+        android:id="@+id/ivProfileImage"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="10dp"
+        app:srcCompat="@android:color/black" />
+
 </RelativeLayout>
