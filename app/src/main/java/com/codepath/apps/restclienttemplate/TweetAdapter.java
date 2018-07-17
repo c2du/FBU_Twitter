@@ -62,15 +62,18 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         // populate the views according to this data
         holder.tvUsername.setText(tweet.user.name);
         holder.tvBody.setText(tweet.body);
-
-        final RoundedCorners roundedCorners = new RoundedCorners(100);
-        final RequestOptions requestOptions = RequestOptions.bitmapTransform(
-                roundedCorners
-        );
-        Glide.with(context).load(tweet.user.profileImageUrl).apply(requestOptions).into(holder.ivProfileImage);
-
-
         holder.tvRelativeTimestamp.setText("\u2022 " + getRelativeTimeAgo(tweet.createdAt));
+
+        if (tweet.retweetCount_local > 0)
+            holder.tvRetweetCount.setText(Integer.toString(tweet.retweetCount_local));
+        else
+            holder.tvRetweetCount.setText("");
+
+        if (tweet.favoriteCount_local > 0)
+            holder.tvFavoriteCount.setText(Integer.toString(tweet.favoriteCount_local));
+        else
+            holder.tvFavoriteCount.setText("");
+
         if (tweet.retweeted_local == true) {
             holder.ivRetweet.setImageResource(R.drawable.ic_vector_retweet);
             holder.ivRetweet.setColorFilter(ContextCompat.getColor(context, R.color.retweetGreen), android.graphics.PorterDuff.Mode.SRC_IN);
@@ -78,6 +81,20 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             holder.ivRetweet.setImageResource(R.drawable.ic_vector_retweet_stroke);
             holder.ivRetweet.setColorFilter(ContextCompat.getColor(context, R.color.greyText), android.graphics.PorterDuff.Mode.SRC_IN);
         }
+
+        if (tweet.favorited_local == true) {
+            holder.ivFavorite.setImageResource(R.drawable.ic_vector_heart);
+            holder.ivFavorite.setColorFilter(ContextCompat.getColor(context, R.color.favoriteRed), android.graphics.PorterDuff.Mode.SRC_IN);
+        } else {
+            holder.ivFavorite.setImageResource(R.drawable.ic_vector_heart_stroke);
+            holder.ivFavorite.setColorFilter(ContextCompat.getColor(context, R.color.greyText), android.graphics.PorterDuff.Mode.SRC_IN);
+        }
+
+        final RoundedCorners roundedCorners = new RoundedCorners(100);
+        final RequestOptions requestOptions = RequestOptions.bitmapTransform(
+                roundedCorners
+        );
+        Glide.with(context).load(tweet.user.profileImageUrl).apply(requestOptions).into(holder.ivProfileImage);
 //        if (tweet.replyCount > 0)
 //            holder.tvReplyCount.setText(tweet.replyCount);
     }
@@ -123,10 +140,14 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public TextView tvRelativeTimestamp;
         public ImageView ivReply;
         public ImageView ivRetweet;
+        public TextView tvRetweetCount;
+        public ImageView ivFavorite;
+        public TextView tvFavoriteCount;
 //        public TextView tvReplyCount;
 
         private final int BUTTON_REPLY_CODE = 0;
         private final int BUTTON_RETWEET_CODE = 1;
+        private final int BUTTON_FAVORITE_CODE = 2;
         private WeakReference<ClickListener> listenerRef;
 
         public ViewHolder(View itemView, ClickListener listener) {
@@ -142,10 +163,14 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvRelativeTimestamp = (TextView) itemView.findViewById(R.id.tvRelativeTimestamp);
             ivReply = itemView.findViewById(R.id.ivReply);
             ivRetweet = itemView.findViewById(R.id.ivRetweet);
+            tvRetweetCount = itemView.findViewById(R.id.tvRetweetCount);
+            ivFavorite = itemView.findViewById(R.id.ivFavorite);
+            tvFavoriteCount = itemView.findViewById(R.id.tvFavoriteCount);
 //            tvReplyCount = itemView.findViewById(R.id.tvReplyCount);
 
             ivReply.setOnClickListener(this);
             ivRetweet.setOnClickListener(this);
+            ivFavorite.setOnClickListener(this);
         }
 
         @Override
@@ -154,6 +179,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                 listenerRef.get().onPositionClicked(getAdapterPosition(), BUTTON_REPLY_CODE);
             } else if (v.getId() == ivRetweet.getId()) {
                 listenerRef.get().onPositionClicked(getAdapterPosition(), BUTTON_RETWEET_CODE);
+            } else if (v.getId() == ivFavorite.getId()) {
+                listenerRef.get().onPositionClicked(getAdapterPosition(), BUTTON_FAVORITE_CODE);
             }
         }
     }

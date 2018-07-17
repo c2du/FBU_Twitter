@@ -66,6 +66,39 @@
         app:srcCompat="@drawable/ic_vector_retweet_stroke"
         android:tint="@color/greyText"/>
 
+    <TextView
+        android:id="@+id/tvRetweetCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvBody"
+        android:layout_marginTop="13dp"
+        android:layout_toEndOf="@+id/ivRetweet"
+        android:textColor="@color/greyText"
+        android:textSize="10sp"
+        android:layout_marginLeft="2dp"/>
+
+    <ImageView
+        android:id="@+id/ivFavorite"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_below="@id/tvBody"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@id/tvRetweetCount"
+        android:tint="@color/greyText"
+        android:layout_marginLeft="40dp"
+        app:srcCompat="@drawable/ic_vector_heart_stroke" />
+
+    <TextView
+        android:id="@+id/tvFavoriteCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvBody"
+        android:layout_marginTop="13dp"
+        android:layout_toEndOf="@+id/ivFavorite"
+        android:textColor="@color/greyText"
+        android:textSize="10sp"
+        android:layout_marginLeft="2dp"/>
+
     <!--<TextView-->
         <!--android:id="@+id/tvReplyCount"-->
         <!--android:layout_width="wrap_content"-->

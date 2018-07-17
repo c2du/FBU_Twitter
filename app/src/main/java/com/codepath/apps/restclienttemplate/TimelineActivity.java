@@ -33,6 +33,7 @@ public class TimelineActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeContainer;
     private final int BUTTON_REPLY_CODE = 0;
     private final int BUTTON_RETWEET_CODE = 1;
+    private final int BUTTON_FAVORITE_CODE = 2;
 
     // REQUEST_COMPOSE_EMPTY can be any value we like, used to determine the result type later
     private final int REQUEST_COMPOSE_EMPTY = 20;
@@ -66,12 +67,27 @@ public class TimelineActivity extends AppCompatActivity {
                     case BUTTON_RETWEET_CODE:
                         if (t.retweeted_local == true) {
                             t.toggleRetweetedLocal();
+                            t.decrementRetweetCount();
                             tweetAdapter.notifyItemChanged(position);
                             unretweetTweet(t.uid);
                         } else {
                             t.toggleRetweetedLocal();
+                            t.incrementRetweetCount();
                             tweetAdapter.notifyItemChanged(position);
                             retweetTweet(t.uid);
+                        }
+                        break;
+                    case BUTTON_FAVORITE_CODE:
+                        if (t.favorited_local == true) {
+                            t.toggleFavoritedLocal();
+                            t.decrementFavoriteCount();
+                            tweetAdapter.notifyItemChanged(position);
+                            unfavoriteTweet(t.uid);
+                        } else {
+                            t.toggleFavoritedLocal();
+                            t.incrementFavoriteCount();
+                            tweetAdapter.notifyItemChanged(position);
+                            favoriteTweet(t.uid);
                         }
                         break;
                 }
@@ -280,6 +296,68 @@ public class TimelineActivity extends AppCompatActivity {
 
     public void unretweetTweet(long uid) {
         client.unretweetTweet(uid, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    Tweet newTweet = Tweet.fromJSON(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("SendTweet", errorResponse.toString());
+                pb.setVisibility(ProgressBar.INVISIBLE);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.d("SendTweet", errorResponse.toString());
+                pb.setVisibility(ProgressBar.INVISIBLE);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d("SendTweet", responseString);
+                pb.setVisibility(ProgressBar.INVISIBLE);
+            }
+        });
+    }
+
+    public void favoriteTweet(long uid) {
+        client.favoriteTweet(uid, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    Tweet newTweet = Tweet.fromJSON(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("SendTweet", errorResponse.toString());
+                pb.setVisibility(ProgressBar.INVISIBLE);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.d("SendTweet", errorResponse.toString());
+                pb.setVisibility(ProgressBar.INVISIBLE);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d("SendTweet", responseString);
+                pb.setVisibility(ProgressBar.INVISIBLE);
+            }
+        });
+    }
+
+    public void unfavoriteTweet(long uid) {
+        client.unfavoriteTweet(uid, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {

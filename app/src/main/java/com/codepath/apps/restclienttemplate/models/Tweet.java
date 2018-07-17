@@ -13,7 +13,14 @@ public class Tweet {
     public User user;
     public String createdAt;
     public Boolean retweeted;
+    public Boolean favorited;
+    public int retweetCount;
+    public int favoriteCount;
+
     public boolean retweeted_local;
+    public int retweetCount_local;
+    public boolean favorited_local;
+    public int favoriteCount_local;
     // Only available to premium accounts
 //    public int replyCount;
 
@@ -31,6 +38,13 @@ public class Tweet {
 //        tweet.replyCount = jsonObject.getInt("reply_count");
         tweet.retweeted = jsonObject.getBoolean("retweeted");
         tweet.retweeted_local = tweet.retweeted;
+        tweet.retweetCount = jsonObject.getInt("retweet_count");
+        tweet.retweetCount_local = tweet.retweetCount;
+
+        tweet.favorited = jsonObject.getBoolean("favorited");
+        tweet.favorited_local = tweet.favorited;
+        tweet.favoriteCount = jsonObject.getInt("favorite_count");
+        tweet.favoriteCount_local = tweet.favoriteCount;
 
         return tweet;
     }
@@ -40,6 +54,29 @@ public class Tweet {
             retweeted_local = false;
         else
             retweeted_local = true;
+    }
+
+    public void incrementRetweetCount() {
+        this.retweetCount_local++;
+    }
+
+    public void decrementRetweetCount() {
+        this.retweetCount_local--;
+    }
+
+    public void toggleFavoritedLocal() {
+        if (favorited_local == true)
+            favorited_local = false;
+        else
+            favorited_local = true;
+    }
+
+    public void incrementFavoriteCount() {
+        this.favoriteCount_local++;
+    }
+
+    public void decrementFavoriteCount() {
+        this.favoriteCount_local--;
     }
 
 }
