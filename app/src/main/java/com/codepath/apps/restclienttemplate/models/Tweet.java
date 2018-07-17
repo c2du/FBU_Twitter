@@ -12,6 +12,8 @@ public class Tweet {
     public long uid; // database ID for the tweet
     public User user;
     public String createdAt;
+    // Only available to premium accounts
+//    public int replyCount;
 
     public Tweet() {}
 
@@ -24,6 +26,7 @@ public class Tweet {
         tweet.uid = jsonObject.getLong("id");
         tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
         tweet.createdAt = jsonObject.getString("created_at");
+//        tweet.replyCount = jsonObject.getInt("reply_count");
 
         return tweet;
     }

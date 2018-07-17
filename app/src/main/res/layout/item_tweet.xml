@@ -43,4 +43,26 @@
         android:layout_toEndOf="@+id/tvUserName"
         android:textColor="@color/greyText"
         android:text="TextView" />
+
+    <ImageView
+        android:id="@+id/ivReply"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/tvBody"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:adjustViewBounds="true"
+        app:srcCompat="@drawable/ic_reply" />
+
+    <!--<TextView-->
+        <!--android:id="@+id/tvReplyCount"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/tvBody"-->
+        <!--android:layout_marginTop="13dp"-->
+        <!--android:layout_toEndOf="@+id/ivReply"-->
+        <!--android:text="TextView"-->
+        <!--android:textColor="@color/whiteText"-->
+        <!--android:textSize="10sp" />-->
 </RelativeLayout>

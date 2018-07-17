@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -31,8 +32,10 @@ public class ComposeActivity extends AppCompatActivity {
     private TextView tvCharCount;
     private TwitterClient client;
     private Tweet tweet;
+    private Tweet replyToTweet;
     private ProgressBar pb;
     private ImageView ivProfileImage;
+    private Button btCompose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +46,23 @@ public class ComposeActivity extends AppCompatActivity {
         tvCharCount = (TextView) findViewById(R.id.tvCharCount);
         pb = (ProgressBar) findViewById(R.id.pbLoading);
         ivProfileImage = findViewById(R.id.ivProfileImage);
+        btCompose = findViewById(R.id.btCompose);
 
+        replyToTweet = Parcels.unwrap(getIntent().getParcelableExtra("tweet"));
 
+        if (replyToTweet != null) {
+            etCompose.setText("@" + replyToTweet.user.screenName);
+        }
+
+        btCompose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (replyToTweet != null)
+                    replyTweet(v);
+                else
+                    composeTweet(v);
+            }
+        });
     }
 
     @Override
@@ -83,6 +101,50 @@ public class ComposeActivity extends AppCompatActivity {
         pb.setVisibility(ProgressBar.VISIBLE);
 
         client.sendTweet(etCompose.getText().toString(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    tweet = Tweet.fromJSON(response);
+                    //Log.d("SendTweet", tweet.body);
+
+                    // Prepare data intent
+                    Intent data = new Intent();
+                    // Pass relevant data back as a result
+                    data.putExtra("tweet", Parcels.wrap(tweet));
+                    //data.putExtra("code", 200); // ints work too
+                    // Activity finished ok, return the data
+                    setResult(RESULT_OK, data); // set result code and bundle data for response
+                    pb.setVisibility(ProgressBar.INVISIBLE);
+                    finish(); // closes the activity, pass data to parent
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("SendTweet", errorResponse.toString());
+                pb.setVisibility(ProgressBar.INVISIBLE);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.d("SendTweet", errorResponse.toString());
+                pb.setVisibility(ProgressBar.INVISIBLE);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d("SendTweet", responseString);
+                pb.setVisibility(ProgressBar.INVISIBLE);
+            }
+        });
+    }
+
+    public void replyTweet(View view) {
+        pb.setVisibility(ProgressBar.VISIBLE);
+
+        client.replyTweet(etCompose.getText().toString(), replyToTweet.uid, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {

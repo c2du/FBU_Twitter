@@ -9,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
+import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -20,12 +22,21 @@ import java.util.Locale;
 
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
 
+    public interface ClickListener {
+
+        void onPositionClicked(int position, int button_code);
+
+//        void onLongClicked(int position);
+    }
+
     private List<Tweet> mTweets;
     Context context;
+    private final ClickListener listener;
 
     // pass in the Tweets array into the Constructor
-    public TweetAdapter(List<Tweet> tweets) {
+    public TweetAdapter(List<Tweet> tweets, ClickListener listener) {
         mTweets = tweets;
+        this.listener = listener;
     }
 
     // for each row, inflate the layout and cache references into ViewHolder
@@ -36,7 +47,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View tweetView = inflater.inflate(R.layout.item_tweet, parent, false);
-        ViewHolder viewHolder = new ViewHolder(tweetView);
+        ViewHolder viewHolder = new ViewHolder(tweetView, listener);
         return viewHolder;
     }
 
@@ -51,6 +62,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         holder.tvBody.setText(tweet.body);
         Glide.with(context).load(tweet.user.profileImageUrl).into(holder.ivProfileImage);
         holder.tvRelativeTimestamp.setText("\u2022 " + getRelativeTimeAgo(tweet.createdAt));
+//        if (tweet.replyCount > 0)
+//            holder.tvReplyCount.setText(tweet.replyCount);
     }
 
     @Override
@@ -87,14 +100,21 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     }
 
     // Create ViewHolder class
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView ivProfileImage;
         public TextView tvUsername;
         public TextView tvBody;
         public TextView tvRelativeTimestamp;
+        public ImageView ivReply;
+//        public TextView tvReplyCount;
 
-        public ViewHolder(View itemView) {
+        private final int BUTTON_REPLY_CODE = 0;
+        private WeakReference<ClickListener> listenerRef;
+
+        public ViewHolder(View itemView, ClickListener listener) {
             super(itemView);
+
+            listenerRef = new WeakReference<>(listener);
 
             // perform findViewById lookups
 
@@ -102,6 +122,20 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvUsername = (TextView) itemView.findViewById(R.id.tvUserName);
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             tvRelativeTimestamp = (TextView) itemView.findViewById(R.id.tvRelativeTimestamp);
+            ivReply = itemView.findViewById(R.id.ivReply);
+//            tvReplyCount = itemView.findViewById(R.id.tvReplyCount);
+
+            ivReply.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (v.getId() == ivReply.getId()) {
+                Toast.makeText(v.getContext(), "ITEM PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+                listenerRef.get().onPositionClicked(getAdapterPosition(), BUTTON_REPLY_CODE);
+            } else {
+                Toast.makeText(v.getContext(), "ROW PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

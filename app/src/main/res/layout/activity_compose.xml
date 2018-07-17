@@ -25,7 +25,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:background="#1DA1F2"
-        android:onClick="composeTweet"
         android:text="@string/tweet"
         android:textAllCaps="false"
         android:textColor="@android:color/white" />

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -31,9 +32,11 @@ public class TimelineActivity extends AppCompatActivity {
     RecyclerView rvTweets;
     ProgressBar pb;
     private SwipeRefreshLayout swipeContainer;
+    private final int BUTTON_REPLY_CODE = 0;
 
-    // REQUEST_CODE can be any value we like, used to determine the result type later
-    private final int REQUEST_CODE = 20;
+    // REQUEST_COMPOSE_EMPTY can be any value we like, used to determine the result type later
+    private final int REQUEST_COMPOSE_EMPTY = 20;
+    private final int REQUEST_COMPOSE_REPLY = 40;
 
     private final String TAG = "debugdebugdebug";
 
@@ -50,7 +53,23 @@ public class TimelineActivity extends AppCompatActivity {
         // init the arraylist (data source)
         tweets = new ArrayList<>();
         // construct the adapter from this datasource
-        tweetAdapter = new TweetAdapter(tweets);
+        tweetAdapter = new TweetAdapter(tweets, new TweetAdapter.ClickListener() {
+            @Override
+            public void onPositionClicked(int position, int code) {
+                switch (code) {
+                    case BUTTON_REPLY_CODE:
+                        Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
+                        i.putExtra("tweet", Parcels.wrap(tweets.get(position)));
+                        startActivityForResult(i, REQUEST_COMPOSE_REPLY);
+                }
+                Toast.makeText(TimelineActivity.this, String.format("Clicked %d position TimelineActivity", position), Toast.LENGTH_LONG).show();
+            }
+
+//            @Override
+//            public void onLongClicked(int position) {
+//
+//            }
+        });
         // RecyclerView setup (layout manager, user adapter)
         rvTweets.setLayoutManager(new LinearLayoutManager(this));
         // set the adapter
@@ -146,7 +165,7 @@ public class TimelineActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // REQUEST_CODE is defined above
+        // REQUEST_COMPOSE_EMPTY is defined above
         if (resultCode == RESULT_OK) {
             Tweet tweet = (Tweet) Parcels.unwrap(data.getParcelableExtra("tweet"));
             //Log.d("SendTweet", "Activity result: " + tweet.body);
@@ -160,7 +179,7 @@ public class TimelineActivity extends AppCompatActivity {
     private void composeMessage() {
         Intent i = new Intent(this, ComposeActivity.class);
         //i.putExtra("tweet", Parcels.wrap(tweet));
-        startActivityForResult(i, REQUEST_CODE);
+        startActivityForResult(i, REQUEST_COMPOSE_EMPTY);
     }
 
     private void populateTimeline() {
