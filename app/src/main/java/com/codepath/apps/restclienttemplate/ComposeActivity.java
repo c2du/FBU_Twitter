@@ -51,7 +51,8 @@ public class ComposeActivity extends AppCompatActivity {
         replyToTweet = Parcels.unwrap(getIntent().getParcelableExtra("tweet"));
 
         if (replyToTweet != null) {
-            etCompose.setText("@" + replyToTweet.user.screenName);
+            etCompose.setText("@" + replyToTweet.user.screenName + " ");
+            etCompose.setSelection(etCompose.getText().length());
         }
 
         btCompose.setOnClickListener(new View.OnClickListener() {
