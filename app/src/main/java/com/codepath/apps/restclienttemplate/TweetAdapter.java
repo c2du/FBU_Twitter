@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import java.lang.ref.WeakReference;
@@ -60,7 +62,14 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         // populate the views according to this data
         holder.tvUsername.setText(tweet.user.name);
         holder.tvBody.setText(tweet.body);
-        Glide.with(context).load(tweet.user.profileImageUrl).into(holder.ivProfileImage);
+
+        final RoundedCorners roundedCorners = new RoundedCorners(100);
+        final RequestOptions requestOptions = RequestOptions.bitmapTransform(
+                roundedCorners
+        );
+        Glide.with(context).load(tweet.user.profileImageUrl).apply(requestOptions).into(holder.ivProfileImage);
+
+
         holder.tvRelativeTimestamp.setText("\u2022 " + getRelativeTimeAgo(tweet.createdAt));
         if (tweet.retweeted_local == true) {
             holder.ivRetweet.setImageResource(R.drawable.ic_vector_retweet);
