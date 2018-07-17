@@ -12,6 +12,8 @@ public class Tweet {
     public long uid; // database ID for the tweet
     public User user;
     public String createdAt;
+    public Boolean retweeted;
+    public boolean retweeted_local;
     // Only available to premium accounts
 //    public int replyCount;
 
@@ -27,8 +29,17 @@ public class Tweet {
         tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
         tweet.createdAt = jsonObject.getString("created_at");
 //        tweet.replyCount = jsonObject.getInt("reply_count");
+        tweet.retweeted = jsonObject.getBoolean("retweeted");
+        tweet.retweeted_local = tweet.retweeted;
 
         return tweet;
+    }
+
+    public void toggleRetweetedLocal() {
+        if (retweeted_local == true)
+            retweeted_local = false;
+        else
+            retweeted_local = true;
     }
 
 }

@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -9,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -62,6 +62,13 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         holder.tvBody.setText(tweet.body);
         Glide.with(context).load(tweet.user.profileImageUrl).into(holder.ivProfileImage);
         holder.tvRelativeTimestamp.setText("\u2022 " + getRelativeTimeAgo(tweet.createdAt));
+        if (tweet.retweeted_local == true) {
+            holder.ivRetweet.setImageResource(R.drawable.ic_vector_retweet);
+            holder.ivRetweet.setColorFilter(ContextCompat.getColor(context, R.color.retweetGreen), android.graphics.PorterDuff.Mode.SRC_IN);
+        } else {
+            holder.ivRetweet.setImageResource(R.drawable.ic_vector_retweet_stroke);
+            holder.ivRetweet.setColorFilter(ContextCompat.getColor(context, R.color.greyText), android.graphics.PorterDuff.Mode.SRC_IN);
+        }
 //        if (tweet.replyCount > 0)
 //            holder.tvReplyCount.setText(tweet.replyCount);
     }
@@ -106,9 +113,11 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public TextView tvBody;
         public TextView tvRelativeTimestamp;
         public ImageView ivReply;
+        public ImageView ivRetweet;
 //        public TextView tvReplyCount;
 
         private final int BUTTON_REPLY_CODE = 0;
+        private final int BUTTON_RETWEET_CODE = 1;
         private WeakReference<ClickListener> listenerRef;
 
         public ViewHolder(View itemView, ClickListener listener) {
@@ -123,18 +132,19 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             tvRelativeTimestamp = (TextView) itemView.findViewById(R.id.tvRelativeTimestamp);
             ivReply = itemView.findViewById(R.id.ivReply);
+            ivRetweet = itemView.findViewById(R.id.ivRetweet);
 //            tvReplyCount = itemView.findViewById(R.id.tvReplyCount);
 
             ivReply.setOnClickListener(this);
+            ivRetweet.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             if (v.getId() == ivReply.getId()) {
-                Toast.makeText(v.getContext(), "ITEM PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
                 listenerRef.get().onPositionClicked(getAdapterPosition(), BUTTON_REPLY_CODE);
-            } else {
-                Toast.makeText(v.getContext(), "ROW PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+            } else if (v.getId() == ivRetweet.getId()) {
+                listenerRef.get().onPositionClicked(getAdapterPosition(), BUTTON_RETWEET_CODE);
             }
         }
     }

@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -33,6 +32,7 @@ public class TimelineActivity extends AppCompatActivity {
     ProgressBar pb;
     private SwipeRefreshLayout swipeContainer;
     private final int BUTTON_REPLY_CODE = 0;
+    private final int BUTTON_RETWEET_CODE = 1;
 
     // REQUEST_COMPOSE_EMPTY can be any value we like, used to determine the result type later
     private final int REQUEST_COMPOSE_EMPTY = 20;
@@ -56,13 +56,26 @@ public class TimelineActivity extends AppCompatActivity {
         tweetAdapter = new TweetAdapter(tweets, new TweetAdapter.ClickListener() {
             @Override
             public void onPositionClicked(int position, int code) {
+                Tweet t = tweets.get(position);
                 switch (code) {
                     case BUTTON_REPLY_CODE:
                         Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
-                        i.putExtra("tweet", Parcels.wrap(tweets.get(position)));
+                        i.putExtra("tweet", Parcels.wrap(t));
                         startActivityForResult(i, REQUEST_COMPOSE_REPLY);
+                        break;
+                    case BUTTON_RETWEET_CODE:
+                        if (t.retweeted_local == true) {
+                            t.toggleRetweetedLocal();
+                            tweetAdapter.notifyItemChanged(position);
+                            unretweetTweet(t.uid);
+                        } else {
+                            t.toggleRetweetedLocal();
+                            tweetAdapter.notifyItemChanged(position);
+                            retweetTweet(t.uid);
+                        }
+                        break;
                 }
-                Toast.makeText(TimelineActivity.this, String.format("Clicked %d position TimelineActivity", position), Toast.LENGTH_LONG).show();
+//                Toast.makeText(TimelineActivity.this, String.format("Clicked %d position TimelineActivity", position), Toast.LENGTH_LONG).show();
             }
 
 //            @Override
@@ -229,6 +242,68 @@ public class TimelineActivity extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("TwitterClient", errorResponse.toString());
                 throwable.printStackTrace();
+                pb.setVisibility(ProgressBar.INVISIBLE);
+            }
+        });
+    }
+
+    public void retweetTweet(long uid) {
+        client.retweetTweet(uid, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    Tweet newTweet = Tweet.fromJSON(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("SendTweet", errorResponse.toString());
+                pb.setVisibility(ProgressBar.INVISIBLE);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.d("SendTweet", errorResponse.toString());
+                pb.setVisibility(ProgressBar.INVISIBLE);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d("SendTweet", responseString);
+                pb.setVisibility(ProgressBar.INVISIBLE);
+            }
+        });
+    }
+
+    public void unretweetTweet(long uid) {
+        client.unretweetTweet(uid, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    Tweet newTweet = Tweet.fromJSON(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("SendTweet", errorResponse.toString());
+                pb.setVisibility(ProgressBar.INVISIBLE);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.d("SendTweet", errorResponse.toString());
+                pb.setVisibility(ProgressBar.INVISIBLE);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d("SendTweet", responseString);
                 pb.setVisibility(ProgressBar.INVISIBLE);
             }
         });

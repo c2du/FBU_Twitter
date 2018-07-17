@@ -17,4 +17,6 @@
     <color name="whiteText">#f9f9f9</color>
 
     <color name="greyText">#cccccc</color>
+
+    <color name="retweetGreen">#59d674</color>
 </resources>
