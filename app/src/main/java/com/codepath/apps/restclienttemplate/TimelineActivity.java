@@ -34,6 +34,7 @@ public class TimelineActivity extends AppCompatActivity {
     private final int BUTTON_REPLY_CODE = 0;
     private final int BUTTON_RETWEET_CODE = 1;
     private final int BUTTON_FAVORITE_CODE = 2;
+    private final int ITEMVIEW_CODE = 3;
 
     // REQUEST_COMPOSE_EMPTY can be any value we like, used to determine the result type later
     private final int REQUEST_COMPOSE_EMPTY = 20;
@@ -57,6 +58,7 @@ public class TimelineActivity extends AppCompatActivity {
         tweetAdapter = new TweetAdapter(tweets, new TweetAdapter.ClickListener() {
             @Override
             public void onPositionClicked(int position, int code) {
+//                Toast.makeText(TimelineActivity.this, String.format("Code: %d", code), Toast.LENGTH_LONG).show();
                 Tweet t = tweets.get(position);
                 switch (code) {
                     case BUTTON_REPLY_CODE:
@@ -89,6 +91,11 @@ public class TimelineActivity extends AppCompatActivity {
                             tweetAdapter.notifyItemChanged(position);
                             favoriteTweet(t.uid);
                         }
+                        break;
+                    case ITEMVIEW_CODE:
+                        Intent b = new Intent(TimelineActivity.this, TweetDetailsActivity.class);
+                        b.putExtra("tweet", Parcels.wrap(t));
+                        startActivity(b);
                         break;
                 }
 //                Toast.makeText(TimelineActivity.this, String.format("Clicked %d position TimelineActivity", position), Toast.LENGTH_LONG).show();

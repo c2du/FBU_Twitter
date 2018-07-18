@@ -51,6 +51,8 @@ dependencies {
     implementation 'org.parceler:parceler-api:1.1.6'
     implementation 'com.android.support:support-v4:27.1.1'
     annotationProcessor 'org.parceler:parceler:1.1.6'
-    implementation "com.android.support:support-vector-drawable:${supportLibVersion}" // VectorDrawableCompat
-    implementation "com.android.support:animated-vector-drawable:${supportLibVersion}" // AnimatedVectorDrawableCompat
+    implementation "com.android.support:support-vector-drawable:${supportLibVersion}"
+    // VectorDrawableCompat
+    implementation "com.android.support:animated-vector-drawable:${supportLibVersion}"
+    // AnimatedVectorDrawableCompat
 }

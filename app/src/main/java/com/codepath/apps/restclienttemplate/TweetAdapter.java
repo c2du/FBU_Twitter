@@ -60,7 +60,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         Tweet tweet = mTweets.get(position);
 
         // populate the views according to this data
-        holder.tvUsername.setText(tweet.user.name);
+        holder.tvUsername.setText(tweet.user.screenName);
         holder.tvBody.setText(tweet.body);
         holder.tvRelativeTimestamp.setText("\u2022 " + getRelativeTimeAgo(tweet.createdAt));
 
@@ -148,6 +148,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         private final int BUTTON_REPLY_CODE = 0;
         private final int BUTTON_RETWEET_CODE = 1;
         private final int BUTTON_FAVORITE_CODE = 2;
+        private final int ITEMVIEW_CODE = 3;
         private WeakReference<ClickListener> listenerRef;
 
         public ViewHolder(View itemView, ClickListener listener) {
@@ -171,6 +172,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             ivReply.setOnClickListener(this);
             ivRetweet.setOnClickListener(this);
             ivFavorite.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override
@@ -181,6 +183,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                 listenerRef.get().onPositionClicked(getAdapterPosition(), BUTTON_RETWEET_CODE);
             } else if (v.getId() == ivFavorite.getId()) {
                 listenerRef.get().onPositionClicked(getAdapterPosition(), BUTTON_FAVORITE_CODE);
+            } else {
+                listenerRef.get().onPositionClicked(getAdapterPosition(), ITEMVIEW_CODE);
             }
         }
     }
