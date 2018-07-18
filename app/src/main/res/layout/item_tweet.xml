@@ -100,6 +100,14 @@
         android:textSize="10sp"
         android:layout_marginLeft="2dp"/>
 
+    <ImageView
+        android:id="@+id/ivDivider"
+        android:layout_width="match_parent"
+        android:layout_height="0.2dp"
+        android:layout_below="@id/ivReply"
+        android:layout_marginTop="20dp"
+        app:srcCompat="@android:color/black" />
+
     <!--<TextView-->
         <!--android:id="@+id/tvReplyCount"-->
         <!--android:layout_width="wrap_content"-->
