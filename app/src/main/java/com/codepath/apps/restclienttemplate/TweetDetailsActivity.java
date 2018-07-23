@@ -35,6 +35,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
     private ImageView ivReply;
     private ImageView ivRetweet;
     private ImageView ivFavorite;
+    private ImageView ivMedia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
         ivReply = findViewById(R.id.ivReply);
         ivRetweet = findViewById(R.id.ivRetweet);
         ivFavorite = findViewById(R.id.ivFavorite);
+        ivMedia = findViewById(R.id.ivMedia);
 
         tvName.setText(tweet.user.name);
         tvScreenName.setText("@" + tweet.user.screenName);
@@ -65,6 +67,10 @@ public class TweetDetailsActivity extends AppCompatActivity {
                 roundedCorners
         );
         Glide.with(this).load(tweet.user.profileImageUrl).apply(requestOptions).into(ivProfileImage);
+
+        if(tweet.mediaUrl != null) {
+            Glide.with(this).load(tweet.mediaUrl).into(ivMedia);
+        }
 
         if (tweet.retweeted_local == true) {
             ivRetweet.setImageResource(R.drawable.ic_vector_retweet);

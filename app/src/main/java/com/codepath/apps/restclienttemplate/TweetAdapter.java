@@ -97,6 +97,10 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         Glide.with(context).load(tweet.user.profileImageUrl).apply(requestOptions).into(holder.ivProfileImage);
 //        if (tweet.replyCount > 0)
 //            holder.tvReplyCount.setText(tweet.replyCount);
+
+        if (tweet.mediaUrl != null) {
+            Glide.with(context).load(tweet.mediaUrl+":small").into(holder.ivMedia);
+        }
     }
 
     @Override
@@ -143,6 +147,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public TextView tvRetweetCount;
         public ImageView ivFavorite;
         public TextView tvFavoriteCount;
+        public ImageView ivMedia;
 //        public TextView tvReplyCount;
 
         private final int BUTTON_REPLY_CODE = 0;
@@ -167,6 +172,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvRetweetCount = itemView.findViewById(R.id.tvRetweetCount);
             ivFavorite = itemView.findViewById(R.id.ivFavorite);
             tvFavoriteCount = itemView.findViewById(R.id.tvFavoriteCount);
+            ivMedia = itemView.findViewById(R.id.ivMedia);
 //            tvReplyCount = itemView.findViewById(R.id.tvReplyCount);
 
             ivReply.setOnClickListener(this);

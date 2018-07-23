@@ -1,5 +1,7 @@
 package com.codepath.apps.restclienttemplate.models;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
@@ -16,6 +18,7 @@ public class Tweet {
     public Boolean favorited;
     public int retweetCount;
     public int favoriteCount;
+    public String mediaUrl;
 
     public boolean retweeted_local;
     public int retweetCount_local;
@@ -45,6 +48,10 @@ public class Tweet {
         tweet.favorited_local = tweet.favorited;
         tweet.favoriteCount = jsonObject.getInt("favorite_count");
         tweet.favoriteCount_local = tweet.favoriteCount;
+        if (jsonObject.getJSONObject("entities").getJSONArray("media").length() > 0) {
+            tweet.mediaUrl = jsonObject.getJSONObject("entities").getJSONArray("media").getJSONObject(0).getString("media_url");
+            Log.d("TAG", "TAG");
+        }
 
         return tweet;
     }

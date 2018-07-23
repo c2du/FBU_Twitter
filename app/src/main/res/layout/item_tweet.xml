@@ -35,6 +35,17 @@
         android:text="TextView"
         android:textColor="@color/whiteText"/>
 
+    <ImageView
+        android:id="@+id/ivMedia"
+        android:layout_width="262dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvBody"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@id/ivProfileImage"
+        android:layout_toRightOf="@id/ivProfileImage"
+        app:srcCompat="@android:color/black" />
+
     <TextView
         android:id="@+id/tvRelativeTimestamp"
         android:layout_width="wrap_content"
@@ -49,7 +60,7 @@
         android:id="@+id/ivReply"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_below="@+id/tvBody"
+        android:layout_below="@+id/ivMedia"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/ivProfileImage"
@@ -60,7 +71,7 @@
         android:id="@+id/ivRetweet"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_below="@id/tvBody"
+        android:layout_below="@id/ivMedia"
         android:layout_toEndOf="@id/ivReply"
         android:layout_marginStart="40dp"
         android:layout_marginTop="10dp"
@@ -71,7 +82,7 @@
         android:id="@+id/tvRetweetCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvBody"
+        android:layout_below="@id/ivMedia"
         android:layout_marginTop="13dp"
         android:layout_toEndOf="@+id/ivRetweet"
         android:textColor="@color/greyText"
@@ -82,7 +93,7 @@
         android:id="@+id/ivFavorite"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_below="@id/tvBody"
+        android:layout_below="@id/ivMedia"
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@id/tvRetweetCount"
         android:tint="@color/greyText"
@@ -93,7 +104,7 @@
         android:id="@+id/tvFavoriteCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvBody"
+        android:layout_below="@id/ivMedia"
         android:layout_marginTop="13dp"
         android:layout_toEndOf="@+id/ivFavorite"
         android:textColor="@color/greyText"
